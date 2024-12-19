@@ -22,7 +22,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         // Javne rute
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/users/login", "/api/users/registerPsychologist", "/api/users/registerPatient").permitAll()
 
                         // Swagger rute su javne
                         .requestMatchers(
