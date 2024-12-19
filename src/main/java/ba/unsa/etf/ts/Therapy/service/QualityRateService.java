@@ -10,7 +10,8 @@ import ba.unsa.etf.ts.Therapy.repository.QualityRateRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
+
 import java.time.*;
 import java.util.Calendar;
 import java.util.Date;

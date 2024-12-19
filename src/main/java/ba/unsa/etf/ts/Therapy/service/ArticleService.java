@@ -5,7 +5,7 @@ import ba.unsa.etf.ts.Therapy.exceptions.*;
 //import ba.unsa.etf.pnwt.proto.LoggingRequest;
 //import ba.unsa.etf.pnwt.proto.LoggingResponse;
 import ba.unsa.etf.ts.Therapy.repository.ArticleRepository;
-import net.devh.boot.grpc.client.inject.GrpcClient;
+//import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;

@@ -5,6 +5,7 @@ import ba.unsa.etf.ts.Therapy.dto.UserDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -16,17 +17,24 @@ import java.util.Calendar;
 @Component
 public class JwtTokenHelper {
 
-    /**
-     * Generiše JWT token na osnovu korisničke role.
-     */
+    @Value("${jwt.secret:defaultSecretKey}")
+    private String secretKey;
+
+    private SecretKey key;
+
+    public void init() {
+        this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+    }
+
     public String generateToken(UserDto user, RoleDto role) {
         Date now = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(now);
-        calendar.add(Calendar.DAY_OF_MONTH, 2);  // Token vrijedi 2 dana
+        calendar.add(Calendar.DAY_OF_MONTH, 2);
 
-        // Generišemo dinamički ključ na osnovu imena role
-        SecretKey key = getKeyFromRole(role.getName());
+        if (key == null) {
+            init();
+        }
 
         return Jwts.builder()
                 .setSubject(user.getUserId())
@@ -35,59 +43,51 @@ public class JwtTokenHelper {
                 .setIssuer("TherapyApp")
                 .claim("name", user.getName())
                 .claim("email", user.getEmail())
-                .claim("role", role.getName())  // Dodajemo rolu korisnika
+                .claim("role", role.getName())
                 .signWith(key)
                 .compact();
     }
 
-    /**
-     * Validira JWT token i provjerava rolu.
-     */
     public boolean validateTokenAndItsClaims(String token, List<String> allowedRoles) {
         try {
-            Claims claims = getClaimsFromToken(token);
+            if (key == null) {
+                init();
+            }
+
+            Claims claims = Jwts.parser()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
 
             if (claims.getExpiration().before(new Date())) {
-                return false;  // Token je istekao
+                return false;
             }
 
             String userRole = claims.get("role", String.class);
-            return allowedRoles.isEmpty() || allowedRoles.contains(userRole);  // Provjera role
+            return allowedRoles.isEmpty() || allowedRoles.contains(userRole);
         } catch (Exception ex) {
-            return false;  // Token nije validan
+            return false;
         }
     }
 
-    /**
-     * Vraća korisničko ime iz tokena.
-     */
     public String getUsernameFromToken(String token) {
+        if (key == null) {
+            init();
+        }
+
         return getClaimsFromToken(token).getSubject();
     }
 
-    /**
-     * Parsira JWT token i vraća tvrdnje (claims).
-     */
     public Claims getClaimsFromToken(String token) {
-        String role = Jwts.parser()
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .get("role", String.class);
+        if (key == null) {
+            init();
+        }
 
-        SecretKey key = getKeyFromRole(role);  // Generišemo ključ na osnovu role
         return Jwts.parser()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-    }
-
-    /**
-     * Generiše ključ za JWT potpisivanje na osnovu korisničke role.
-     */
-    private SecretKey getKeyFromRole(String roleName) {
-        String dynamicKey = roleName + "_SecretKey";
-        return Keys.hmacShaKeyFor(dynamicKey.getBytes(StandardCharsets.UTF_8));
     }
 }

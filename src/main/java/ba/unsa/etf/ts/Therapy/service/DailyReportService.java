@@ -5,13 +5,14 @@ import ba.unsa.etf.ts.Therapy.dto.*;
 import ba.unsa.etf.ts.Therapy.repository.*;
 import ba.unsa.etf.ts.Therapy.dto.Mapper.*;
 import ba.unsa.etf.ts.Therapy.exceptions.*;
-import net.devh.boot.grpc.client.inject.GrpcClient;
+//import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.swing.text.html.Option;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;

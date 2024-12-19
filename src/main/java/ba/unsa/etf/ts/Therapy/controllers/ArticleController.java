@@ -6,6 +6,7 @@ import ba.unsa.etf.ts.Therapy.exceptions.*;
 import ba.unsa.etf.ts.Therapy.service.ArticleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -65,7 +66,7 @@ public class ArticleController {
     public ResponseEntity<?> createArticle(@Valid @RequestBody Article article, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getAllErrors().stream()
-                    .map(error -> error.getDefaultMessage())
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .reduce("", String::concat);
             return ResponseEntity.badRequest().body(new ErrorResponse("validation", errorMessage));
         }

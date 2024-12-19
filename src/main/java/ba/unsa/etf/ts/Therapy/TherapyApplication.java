@@ -60,7 +60,7 @@ public class TherapyApplication implements CommandLineRunner {
 	}
 
 	private void initializeRoles() {
-		if (!roleRepository.existsByName("Administrator")) {
+		/*if (!roleRepository.existsByName("Administrator")) {
 			roleRepository.save(new RoleEntity("Administrator", UUID.randomUUID().toString()));
 		}
 		if (!roleRepository.existsByName("Psychologist")) {
@@ -68,7 +68,7 @@ public class TherapyApplication implements CommandLineRunner {
 		}
 		if (!roleRepository.existsByName("Patient")) {
 			roleRepository.save(new RoleEntity("Patient", UUID.randomUUID().toString()));
-		}
+		}*/
 	}
 
 	private void initializeTestData() {

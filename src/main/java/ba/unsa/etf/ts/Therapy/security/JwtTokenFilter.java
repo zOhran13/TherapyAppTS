@@ -25,30 +25,55 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         this.jwtTokenHelper = jwtTokenHelper;
         this.userRepository = userRepository;
     }
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
+
+        // Skip filter for all paths (test mode)
+        chain.doFilter(request, response);
+    }
+
+
+   /* @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws ServletException, IOException {
+
+        // Skip filter for Swagger endpoints
+        String path = request.getRequestURI();
+        if (isSwaggerPath(path)) {
+            chain.doFilter(request, response);
+            return;
+        }
 
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
-            if (jwtTokenHelper.validateTokenAndItsClaims(token, List.of("Administrator", "Psychologist", "Patient"))) {
-                String username = jwtTokenHelper.getUsernameFromToken(token);
+            try {
+                if (jwtTokenHelper.validateTokenAndItsClaims(token, List.of("Administrator", "Psychologist", "Patient"))) {
+                    String username = jwtTokenHelper.getUsernameFromToken(token);
 
-                // Fetch user details from the database
-                UserEntity userDetails = userRepository.findByEmail(username)
-                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                    UserEntity userDetails = userRepository.findByEmail(username)
+                            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-                // Authenticate the user in the security context
-                var authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
+                    var authentication = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities());
 
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            } catch (Exception e) {
+                // Log the error but don't throw it
+                logger.error("Could not set user authentication in security context", e);
             }
         }
         chain.doFilter(request, response);
+    }*/
+
+    private boolean isSwaggerPath(String path) {
+        return path.contains("/swagger-ui") ||
+                path.contains("/v3/api-docs") ||
+                path.contains("/swagger-resources") ||
+                path.contains("/webjars");
     }
 }

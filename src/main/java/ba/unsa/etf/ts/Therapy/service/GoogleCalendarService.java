@@ -11,7 +11,7 @@ import com.google.api.services.calendar.model.*;
 import ba.unsa.etf.ts.Therapy.configuration.GoogleConfiguration;
 import lombok.AllArgsConstructor;
 import lombok.val;
-import net.devh.boot.grpc.client.inject.GrpcClient;
+//import net.devh.boot.grpc.client.inject.GrpcClient;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import net.devh.boot.grpc.client.inject.GrpcClient;
+//import net.devh.boot.grpc.client.inject.GrpcClient;
 @Controller
 @AllArgsConstructor
 @Service
@@ -118,6 +118,7 @@ public class GoogleCalendarService {
             patchRequest.setSendNotifications(true);
             patchRequest.setConferenceDataVersion(1);
             val updatedEvent = patchRequest.execute();
+
 
             return Optional.ofNullable(updatedEvent.getHtmlLink()); // Return the link to the updated event
         } catch (Exception e) {

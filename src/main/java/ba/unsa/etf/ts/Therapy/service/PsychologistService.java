@@ -9,11 +9,11 @@ import ba.unsa.etf.ts.Therapy.repository.*;
 import ba.unsa.etf.ts.Therapy.exceptions.*;
 
 import jakarta.transaction.Transactional;
-import net.devh.boot.grpc.client.inject.GrpcClient;
+//import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

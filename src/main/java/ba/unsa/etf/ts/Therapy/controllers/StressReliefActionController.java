@@ -39,12 +39,12 @@ public class StressReliefActionController {
     }
 
     @PostMapping("/walk")
-    public ResponseEntity<CreateWalkLogResponse> createMeditationLog(@RequestBody @Valid CreateWalkLogRequest request) {
+    public ResponseEntity<CreateWalkLogResponse> createWalkLog(@RequestBody @Valid CreateWalkLogRequest request) {
         return createWalkLogHandler.handle(request);
     }
 
     @PostMapping("/breathcontrol")
-    public ResponseEntity<CreateBreathControlLogResponse> createMeditationLog(@RequestBody @Valid CreateBreathControlLogRequest request) {
+    public ResponseEntity<CreateBreathControlLogResponse> createBreathLog(@RequestBody @Valid CreateBreathControlLogRequest request) {
         return createBreathControlLogHandler.handle(request);
     }
 
