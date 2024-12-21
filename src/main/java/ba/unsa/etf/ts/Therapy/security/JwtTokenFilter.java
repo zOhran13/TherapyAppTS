@@ -25,16 +25,16 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         this.jwtTokenHelper = jwtTokenHelper;
         this.userRepository = userRepository;
     }
-    @Override
+    /*@Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
         // Skip filter for all paths (test mode)
         chain.doFilter(request, response);
-    }
+    }*/
 
 
-   /* @Override
+    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
@@ -68,7 +68,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             }
         }
         chain.doFilter(request, response);
-    }*/
+    }
 
     private boolean isSwaggerPath(String path) {
         return path.contains("/swagger-ui") ||

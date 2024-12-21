@@ -105,14 +105,13 @@ public class UserServiceImp implements UserService {
     }
 
     private boolean isPasswordValid(String password) {
-
-        return password.length() < 8;
+        return password.length() >= 8;
     }
 
     private boolean isEmailValid(String email) {
-
-        return !email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+        return email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
     }
+
 
     @Override
     public List<UserDto> getAllUsers() {

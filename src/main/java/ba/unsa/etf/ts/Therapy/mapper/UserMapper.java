@@ -14,17 +14,18 @@ public class UserMapper {
 
     // Convert User JPA Entity into UserDto
     public UserDto mapToUserDto(UserEntity user){
-        UserDto userDto = new UserDto(
+        String roleId = user.getRole() != null ? user.getRole().getRoleId() : null;
+        return new UserDto(
                 user.getType(),
                 user.getName(),
                 user.getEmail(),
                 user.getPassword(),
                 user.getUserId(),
-                user.getRole().getRoleId(),
+                roleId,
                 user.getImageUrl()
         );
-        return userDto;
     }
+
 
     // Convert UserDto into User JPA Entity
     public UserEntity mapToUser(UserDto userDto){
