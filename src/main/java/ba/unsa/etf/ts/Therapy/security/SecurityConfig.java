@@ -26,6 +26,12 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         // Swagger/OpenAPI endpoints
+
+                        // Javne rute
+                        .requestMatchers("/api/users/login", "/api/users/registerPsychologist", "/api/users/registerPatient").permitAll()
+
+                        // Swagger rute su javne
+
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",

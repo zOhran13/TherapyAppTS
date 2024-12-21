@@ -3,14 +3,18 @@ package ba.unsa.etf.ts.Therapy.service;
 //import ba.unsa.etf.pnwt.proto.LoggingRequest;
 
 
+import ba.unsa.etf.ts.Therapy.dto.PatientDto;
+import ba.unsa.etf.ts.Therapy.dto.PsychologistDto;
 import ba.unsa.etf.ts.Therapy.dto.UserDto;
 import ba.unsa.etf.ts.Therapy.exceptions.UserAlreadyExistsException;
 import ba.unsa.etf.ts.Therapy.exceptions.InvalidFormatException;
 import ba.unsa.etf.ts.Therapy.exceptions.UserNotFoundException;
 import ba.unsa.etf.ts.Therapy.mapper.UserMapper;
+import ba.unsa.etf.ts.Therapy.repository.PatientRepo;
 import ba.unsa.etf.ts.Therapy.repository.RoleRepository;
 import ba.unsa.etf.ts.Therapy.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ba.unsa.etf.ts.Therapy.models.UserEntity;
@@ -24,15 +28,18 @@ public class UserServiceImp implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
+    private final PatientService patientService;
+    private final PsychologistService psychologistService;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
 //    @GrpcClient("logging")
 //    ba.unsa.etf.pnwt.proto.LoggingServiceGrpc.LoggingServiceBlockingStub loggingServiceBlockingStub;
     @Autowired
-    public UserServiceImp(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, UserMapper userMapper) {
+    public UserServiceImp(UserRepository userRepository, PasswordEncoder passwordEncoder, PatientService patientService, PsychologistService psychologistService, RoleRepository roleRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.patientService = patientService;
+        this.psychologistService = psychologistService;
         this.roleRepository = roleRepository;
         this.userMapper = userMapper;
     }
@@ -63,7 +70,11 @@ public class UserServiceImp implements UserService {
         user.setRole(role.get());
 
         UserEntity savedUser = userRepository.save(user);
-
+        PatientDto patientDto = new PatientDto();
+        patientDto.setUserId(savedUser.getUserId());
+        patientDto.setSelectedPsychologistId(null);
+        patientDto.setAge(20);
+        patientService.savePatient(patientDto);
         return userMapper.mapToUserDto(savedUser);
     }
 
@@ -90,6 +101,9 @@ public class UserServiceImp implements UserService {
         user.setPassword(passwordEncoder.encode(password));
 
         UserEntity savedUser = userRepository.save(user);
+        PsychologistDto psychologistDto = new PsychologistDto();
+        psychologistDto.setUserId(savedUser.getUserId());
+        psychologistService.savePsychologist(psychologistDto);
         String id = savedUser.getUserId();
 
 //        LoggingRequest loggingRequest = LoggingRequest.newBuilder()

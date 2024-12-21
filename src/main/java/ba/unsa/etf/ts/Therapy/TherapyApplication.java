@@ -55,7 +55,7 @@ public class TherapyApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		initializeRoles();
+		//initializeRoles();
 		initializeTestData();
 	}
 
@@ -70,6 +70,18 @@ public class TherapyApplication implements CommandLineRunner {
 			roleRepository.save(new RoleEntity("Patient", UUID.randomUUID().toString()));
 		}*/
 	}
+//	private void initializeRoles() {
+//		if (!roleRepository.existsByName("Administrator")) {
+//			roleRepository.save(new RoleEntity("Administrator", UUID.randomUUID().toString()));
+//		}
+//		if (!roleRepository.existsByName("Psychologist")) {
+//			roleRepository.save(new RoleEntity("Psychologist", UUID.randomUUID().toString()));
+//		}
+//		if (!roleRepository.existsByName("Patient")) {
+//			roleRepository.save(new RoleEntity("Patient", UUID.randomUUID().toString()));
+//		}
+//	}
+
 
 	private void initializeTestData() {
 		// Psychologist psychologist = new Psychologist();
