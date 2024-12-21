@@ -67,17 +67,7 @@ public class UserController {
 
     // **Dobijanje Korisnika Po ID-u**
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUserById(
-            @PathVariable String id,
-            @RequestHeader("Authorization") String authorizationHeader) {
-
-        String token = authorizationHeader.replace("Bearer ", "");
-        String userIdFromToken = tokenHelper.getUsernameFromToken(token);
-
-        if (!id.equals(userIdFromToken)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();  // Nije dozvoljeno
-        }
-
+    public ResponseEntity<UserDto> getUserById(@PathVariable String id) {
         UserDto user = userService.getUserById(id);
         return ResponseEntity.ok(user);
     }
@@ -91,54 +81,25 @@ public class UserController {
 
     // **Dobijanje Korisnika Po Emailu**
     @GetMapping("/user/{email}")
-    public ResponseEntity<UserDto> getUserByEmail(
-            @PathVariable String email,
-            @RequestHeader("Authorization") String authorizationHeader) {
-
-        String token = authorizationHeader.replace("Bearer ", "");
-        String userEmailFromToken = tokenHelper.getClaimsFromToken(token).get("email", String.class);
-
-        if (!email.equals(userEmailFromToken)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();  // Nije dozvoljeno
-        }
-
+    public ResponseEntity<UserDto> getUserByEmail(@PathVariable String email) {
         UserDto user = userService.getUserByEmail(email);
         return ResponseEntity.ok(user);
     }
 
     // **Ažuriranje Korisnika Po Emailu**
     @PutMapping("/{email}")
-    public ResponseEntity<UserDto> updateUserByEmail(
-            @PathVariable String email, @RequestBody UserDto userDto,
-            @RequestHeader("Authorization") String authorizationHeader) {
-
-        String token = authorizationHeader.replace("Bearer ", "");
-        String userEmailFromToken = tokenHelper.getClaimsFromToken(token).get("email", String.class);
-
-        if (!email.equals(userEmailFromToken)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();  // Nije dozvoljeno
-        }
-
+    public ResponseEntity<UserDto> updateUserByEmail(@PathVariable String email, @RequestBody UserDto userDto) {
         UserDto updatedUserDto = userService.updateUser(userDto, email);
         return ResponseEntity.ok(updatedUserDto);
     }
 
     // **Brisanje Korisnika Po Emailu**
     @DeleteMapping("/delete")
-    public ResponseEntity<Void> deleteUserByEmail(
-            @RequestBody UserDto userDto,
-            @RequestHeader("Authorization") String authorizationHeader) {
-
-        String token = authorizationHeader.replace("Bearer ", "");
-        String userEmailFromToken = tokenHelper.getClaimsFromToken(token).get("email", String.class);
-
-        if (!userDto.getEmail().equals(userEmailFromToken)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();  // Nije dozvoljeno
-        }
-
+    public ResponseEntity<Void> deleteUserByEmail(@RequestBody UserDto userDto) {
         userService.deleteUser(userDto);
         return ResponseEntity.noContent().build();
     }
+
 
     // **Pretraga Korisnika Po Imeni**
     @GetMapping("/search")

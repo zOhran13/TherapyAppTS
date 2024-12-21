@@ -12,6 +12,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -25,20 +26,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         this.jwtTokenHelper = jwtTokenHelper;
         this.userRepository = userRepository;
     }
-    /*@Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-            throws ServletException, IOException {
-
-        // Skip filter for all paths (test mode)
-        chain.doFilter(request, response);
-    }*/
-
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
-        // Skip filter for Swagger endpoints
         String path = request.getRequestURI();
         if (isSwaggerPath(path)) {
             chain.doFilter(request, response);
@@ -51,19 +43,24 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             String token = authHeader.substring(7);
             try {
                 if (jwtTokenHelper.validateTokenAndItsClaims(token, List.of("Administrator", "Psychologist", "Patient"))) {
-                    String username = jwtTokenHelper.getUsernameFromToken(token);
+                    String email = jwtTokenHelper.getClaimsFromToken(token).get("email", String.class);
 
-                    UserEntity userDetails = userRepository.findByEmail(username)
-                            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                    UserEntity userDetails = userRepository.findByEmail(email)
+                            .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+
+                    logger.info("Korisnik pronađen: " + userDetails.getEmail());
+                    logger.info("Authorities: " + userDetails.getAuthorities());
 
                     var authentication = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities());
 
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                    logger.info("SecurityContext postavljen za korisnika: " + userDetails.getEmail());
                 }
+
             } catch (Exception e) {
-                // Log the error but don't throw it
                 logger.error("Could not set user authentication in security context", e);
             }
         }

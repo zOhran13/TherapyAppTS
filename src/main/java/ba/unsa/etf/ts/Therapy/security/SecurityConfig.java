@@ -41,15 +41,17 @@ public class SecurityConfig {
 
                         // Patient routes
                         .requestMatchers("/api/daily-reports/**", "/stressrelief/**", "/api/meditation-tools/**")
-                        .hasRole("PATIENT")
+                        .hasAuthority("ROLE_PATIENT")
 
                         // Psychotherapist routes
                         .requestMatchers("/api/articles/**", "/api/patients/**", "/api/weekly-reports/**")
-                        .hasRole("PSYCHOTHERAPIST")
+                        .hasAuthority("ROLE_PSYCHOLOGIST")
 
                         // Administrator routes
-                        .requestMatchers("/api/users/**", "/roles/**", "/api/**")
-                        .hasRole("administrator")
+                        .requestMatchers("/api/users/**").hasAuthority("ROLE_ADMINISTRATOR")
+
+                        // Generic rule for other routes
+                        .requestMatchers("/api/**").permitAll()
 
                         // Default rule for all other routes
                         .anyRequest().authenticated()
