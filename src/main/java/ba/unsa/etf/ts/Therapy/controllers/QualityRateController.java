@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/quality-rates")
+@RequestMapping("/api/quality-rates")
 public class QualityRateController {
 
     private final QualityRateService qualityRateService;

@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/psychologists")
+@RequestMapping("/api/psychologists")
 public class PsychologistController {
 
     private final PsychologistService psychologistService;

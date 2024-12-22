@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/weekly-reports")
+@RequestMapping("/api/weekly-reports")
 public class WeeklyReportController {
 
     private final WeeklyReportService weeklyReportService;

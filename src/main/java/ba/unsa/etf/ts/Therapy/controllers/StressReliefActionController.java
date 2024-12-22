@@ -14,7 +14,7 @@ import ba.unsa.etf.ts.Therapy.responses.*;
 
 
 @RestController
-@RequestMapping("/stressrelief")
+@RequestMapping("/api/stressrelief")
 public class StressReliefActionController {
     @Autowired
     private GetActionLogsHandler getActionLogsHandler;
