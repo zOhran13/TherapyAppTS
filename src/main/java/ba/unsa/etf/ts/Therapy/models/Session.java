@@ -22,7 +22,7 @@ public class Session {
     private Psychologist psychologist;
 
     @ManyToOne
-    @JoinColumn(name = "patient_id", referencedColumnName = "user_id")
+    @JoinColumn(name = "patient_id", referencedColumnName = "patient_user_id")
     private Patient patient;
     @NotBlank(message = "Day cannot be empty")
     @Column(name = "day")

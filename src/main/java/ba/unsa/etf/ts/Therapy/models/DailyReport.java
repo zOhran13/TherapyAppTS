@@ -28,7 +28,7 @@ public class DailyReport {
 
     @NotNull(message = "Patient must be specified")
     @ManyToOne
-    @JoinColumn(name = "patient_id", referencedColumnName = "user_id")
+    @JoinColumn(name = "patient_id", referencedColumnName = "patient_user_id")
     private Patient patient;
 
     @ManyToOne

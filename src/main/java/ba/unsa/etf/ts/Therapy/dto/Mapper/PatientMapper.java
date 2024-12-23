@@ -1,9 +1,12 @@
 package ba.unsa.etf.ts.Therapy.dto.Mapper;
 
 import ba.unsa.etf.ts.Therapy.dto.PatientDto;
+import ba.unsa.etf.ts.Therapy.dto.PsychologistDto;
 import ba.unsa.etf.ts.Therapy.models.*;
 import ba.unsa.etf.ts.Therapy.repository.PsychologistRepo;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.mapstruct.Mapper;
@@ -36,11 +39,18 @@ public class PatientMapper {
         Patient patient = new Patient();
         Psychologist psychologist=null;
         if(patientDto.getSelectedPsychologistId()!=null){
-        psychologist = psychologistRepo.findById(patientDto.getSelectedPsychologistId())
-                .orElseThrow(() -> new IllegalArgumentException("Psychologist not found."));}
+        psychologist = psychologistRepo.findById(patientDto.getSelectedPsychologistId()).orElseThrow(() -> new IllegalArgumentException("Psychologist not found."));;
+        }
         patient.setUserId(patientDto.getUserId());
         patient.setAge(patientDto.getAge());
-        patient.setSelectedPsychologist(psychologist);
+        if (psychologist != null) {
+            patient.setSelectedPsychologist(psychologist);
+        }
+        else
+        {
+            Psychologist selectedPsychologist = psychologistRepo.findAll().get(0);
+            patient.setSelectedPsychologist(selectedPsychologist);
+        }
         return patient;
     }
 }

@@ -13,20 +13,27 @@ import java.util.UUID;
 @DiscriminatorValue("patient")
 @Getter
 @Setter
-public class Patient extends User {
+public class Patient {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", columnDefinition = "VARCHAR(64)")
+    private String id;
+
+    @Column(name = "patient_user_id", columnDefinition = "VARCHAR(64)")
+    private String userId;
     @NotNull
     @Range(min = 13, max = 100, message = "Age must be between 13 and 100")
     @Column(name = "age")
     private Integer age;
-    @OneToOne
-    @JoinColumn(name = "selected_psychologist_id", referencedColumnName = "user_id")
+    @ManyToOne
+    @JoinColumn(name = "selected_psychologist_id", referencedColumnName = "user_id", unique = false)
     private Psychologist selectedPsychologist;
     public Patient(UUID userId) {
         super();
     }
 
     public Patient(UUID userId, int i, Psychologist psychologist) {
-        super(userId.toString());
+        this.userId = userId.toString();
         age=i;
         selectedPsychologist=psychologist;
     }

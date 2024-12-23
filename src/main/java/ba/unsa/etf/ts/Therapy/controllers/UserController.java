@@ -25,12 +25,16 @@ public class UserController {
     // **Login Endpoint**
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
+        // Fetch user by email
         UserDto user = userService.getUserByEmail(loginRequestDto.getEmail());
         if (user != null && passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())) {
+            // If user exists and password matches, fetch role and generate token
             RoleDto userRole = roleService.getRoleById(user.getRoleId());
             String token = tokenHelper.generateToken(user, userRole);
             return ResponseEntity.ok(new LoginResponseDto(token));
         }
+
+        // Return unauthorized if authentication fails
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
@@ -51,7 +55,8 @@ public class UserController {
     @PostMapping("/registerPatient")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserDto> createPatient(@RequestBody UserDto userDto, @RequestParam int age) {
-        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        String hashedPassword = passwordEncoder.encode(userDto.getPassword());
+        userDto.setPassword(hashedPassword);
         UserDto createdUserDto = userService.createPatient(userDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUserDto);
     }

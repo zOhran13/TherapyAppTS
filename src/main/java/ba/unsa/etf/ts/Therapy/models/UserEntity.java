@@ -19,7 +19,7 @@ public class UserEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "user_id", columnDefinition = "VARCHAR(64)")
+    @Column(name = "id", columnDefinition = "VARCHAR(64)")
     private String userId;
 
     @ManyToOne

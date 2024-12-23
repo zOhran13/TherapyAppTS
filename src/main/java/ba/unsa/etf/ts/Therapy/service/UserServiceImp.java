@@ -52,11 +52,11 @@ public class UserServiceImp implements UserService {
         }
 
         String password = userDto.getPassword();
-        if (isPasswordValid(password)) {
+        if (!isPasswordValid(password)) {
             throw new InvalidFormatException("Invalid password. Password must meet policy requirements.");
         }
 
-        if (isEmailValid(email)) {
+        if (!isEmailValid(email)) {
             throw new InvalidFormatException("Invalid email format.");
         }
 
@@ -66,7 +66,7 @@ public class UserServiceImp implements UserService {
         }
 
         UserEntity user = userMapper.mapToUser(userDto);
-        user.setPassword(passwordEncoder.encode(password));
+        user.setPassword(password);
         user.setRole(role.get());
 
         UserEntity savedUser = userRepository.save(user);
@@ -89,16 +89,16 @@ public class UserServiceImp implements UserService {
 
 
         String password = userDto.getPassword();
-        if (isPasswordValid(password)) {
+        if (!isPasswordValid(password)) {
             throw new InvalidFormatException("Invalid password. Password must meet policy requirements.");
         }
 
-        if (isEmailValid(email)) {
+        if (!isEmailValid(email)) {
             throw new InvalidFormatException("Invalid email format.");
         }
 
         UserEntity user = userMapper.mapToUser(userDto);
-        user.setPassword(passwordEncoder.encode(password));
+        user.setPassword(password);
 
         UserEntity savedUser = userRepository.save(user);
         PsychologistDto psychologistDto = new PsychologistDto();

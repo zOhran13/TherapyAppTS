@@ -26,7 +26,7 @@ public class QualityRate {
     private Psychologist psychologist;
 
     @ManyToOne
-    @JoinColumn(name = "patient_id", referencedColumnName = "user_id")
+    @JoinColumn(name = "patient_id", referencedColumnName = "patient_user_id")
     private Patient patient;
     @NotNull(message = "Rate cannot be null")
     @Min(value = 1, message = "Rate must be at least 1")

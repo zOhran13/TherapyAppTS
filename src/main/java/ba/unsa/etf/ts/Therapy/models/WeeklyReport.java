@@ -27,7 +27,7 @@ public class WeeklyReport {
     @JoinColumn(name = "psychologist_id", referencedColumnName = "user_id")
     private Psychologist psychologist;
     @ManyToOne
-    @JoinColumn(name = "patient_id", referencedColumnName = "user_id")
+    @JoinColumn(name = "patient_id", referencedColumnName = "patient_user_id")
     private Patient patient;
     @Column(name = "created_at", columnDefinition = "TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)

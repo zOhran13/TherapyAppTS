@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/v3/api-docs.yaml", "/swagger-resources/**", "/webjars/**").permitAll()
                         .requestMatchers("/api/users/registerPsychologist", "/api/users/registerPatient", "/api/users/login").permitAll()
-                        .requestMatchers("/api/daily-reports/**", "/stressrelief/**", "/api/meditation-tools/**","/api/articles/all").hasAuthority("ROLE_PATIENT")
+                        .requestMatchers("/api/daily-reports/**", "/stressrelief/**", "/api/meditation-tools/**","/api/articles/all","/api/users/all", "/api/sessions/getAllAvailableSessions/", "api/patients/checkIfPatientHasChosenPsychologist/").hasAuthority("ROLE_PATIENT")
                         .requestMatchers("/api/articles/**", "/api/patients/**", "/api/weekly-reports/**").hasAuthority("ROLE_PSYCHOLOGIST")
                         .requestMatchers("/api/users/**","/api/articles/all").hasAuthority("ROLE_ADMINISTRATOR")
                         .requestMatchers("/api/**").permitAll()

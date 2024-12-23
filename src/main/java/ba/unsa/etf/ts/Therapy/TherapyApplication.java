@@ -21,7 +21,7 @@ public class TherapyApplication implements CommandLineRunner {
 	private final RoleRepository roleRepository;
 	private final UserRepository userRepository;
 	private final DailyReportRepo dailyReportRepository;
-	private final MessageRepo messageRepository;
+	//private final MessageRepo messageRepository;
 	private final PatientRepo patientRepository;
 	private final PsychologistRepo psychologistRepository;
 	private final QualityRateRepo qualityRateRepository;
@@ -32,7 +32,7 @@ public class TherapyApplication implements CommandLineRunner {
 	public TherapyApplication(RoleRepository roleRepository,
 							  UserRepository userRepository,
 							  DailyReportRepo dailyReportRepository,
-							  MessageRepo messageRepository,
+							//  MessageRepo messageRepository,
 							  PatientRepo patientRepository,
 							  PsychologistRepo psychologistRepository,
 							  QualityRateRepo qualityRateRepository,
@@ -41,7 +41,7 @@ public class TherapyApplication implements CommandLineRunner {
 		this.roleRepository = roleRepository;
 		this.userRepository = userRepository;
 		this.dailyReportRepository = dailyReportRepository;
-		this.messageRepository = messageRepository;
+		//this.messageRepository = messageRepository;
 		this.patientRepository = patientRepository;
 		this.psychologistRepository = psychologistRepository;
 		this.qualityRateRepository = qualityRateRepository;
@@ -55,12 +55,12 @@ public class TherapyApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		//initializeRoles();
+		initializeRoles();
 		initializeTestData();
 	}
 
 	private void initializeRoles() {
-		/*if (!roleRepository.existsByName("Administrator")) {
+		if (!roleRepository.existsByName("Administrator")) {
 			roleRepository.save(new RoleEntity("Administrator", UUID.randomUUID().toString()));
 		}
 		if (!roleRepository.existsByName("Psychologist")) {
@@ -68,7 +68,7 @@ public class TherapyApplication implements CommandLineRunner {
 		}
 		if (!roleRepository.existsByName("Patient")) {
 			roleRepository.save(new RoleEntity("Patient", UUID.randomUUID().toString()));
-		}*/
+		}
 	}
 //	private void initializeRoles() {
 //		if (!roleRepository.existsByName("Administrator")) {
