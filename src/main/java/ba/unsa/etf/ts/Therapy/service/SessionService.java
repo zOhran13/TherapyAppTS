@@ -68,7 +68,7 @@ public class SessionService {
             throw new InvalidFormat("Invalid time format.");
         }
 
-        Optional<Psychologist> p = psychologistRepo.findById(psychologistId);
+        Optional<Psychologist> p = psychologistRepo.findByUserId(psychologistId);
         Psychologist psychologist = p.orElseThrow(() -> new UserNotFound("Psychologist not found"));
         Session session = new Session(psychologist, null, day, time);
 
@@ -94,7 +94,7 @@ public class SessionService {
         } catch (Exception e) {
             throw new UserNotFound("Invalid time format");
         }
-        Optional<Psychologist> p = psychologistRepo.findById(psychologistId);
+        Optional<Psychologist> p = psychologistRepo.findByUserId(psychologistId);
         Psychologist psychologist = p.orElseThrow(() -> new UserNotFound("Psychologist not found"));
 
         Optional<Session> sessionOptional = sessionRepo.findByPsychologistAndDayAndTimeAndPatientIsNull(psychologist, day, time);
@@ -119,7 +119,7 @@ public class SessionService {
     }
 
     public List<SessionDto> getAllAvailableSessions(String psychologistId) {
-        Optional<Psychologist> psychologistOptional = psychologistRepo.findById(psychologistId);
+        Optional<Psychologist> psychologistOptional = psychologistRepo.findByUserId(psychologistId);
         Psychologist psychologist = psychologistOptional.orElseThrow(() -> new UserNotFound("Psychologist not found"));
 
         List<Session> sessions = sessionRepo.findByPsychologist(psychologist);

@@ -78,7 +78,7 @@ private final SessionRepo sessionRepo;
     }
     public List<PatientDto> getAllPatientsThatGotNoReport(String psychologistId) {
         List<Patient> patientsWithoutReport = new ArrayList<>();
-        Optional<Psychologist> psychologistOptional = psychologistRepo.findById(psychologistId);
+        Optional<Psychologist> psychologistOptional = psychologistRepo.findByUserId(psychologistId);
         Psychologist psychologist = psychologistOptional.orElseThrow(() -> new UserNotFound("Psychologist not found"));
         List<Session> sessions = sessionRepo.findByPsychologist(psychologist);
         LocalDateTime currentDate = LocalDateTime.now();

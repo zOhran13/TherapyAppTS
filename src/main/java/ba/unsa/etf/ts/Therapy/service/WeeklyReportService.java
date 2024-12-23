@@ -37,7 +37,7 @@ public class WeeklyReportService {
     }
 
     public WeeklyReportDto createWeeklyReportForUser(@Valid WeeklyReportDto weeklyReportDto) {
-        Optional<Psychologist> psychologistOptional = psychologistRepo.findById(weeklyReportDto.getPsychologistId());
+        Optional<Psychologist> psychologistOptional = psychologistRepo.findByUserId(weeklyReportDto.getPsychologistId());
         Psychologist psychologist = psychologistOptional.orElseThrow(() -> new UserNotFound("Psychologist not found."));
 
         Optional<Patient> patientOptional = patientRepo.findById(weeklyReportDto.getPatientId());
@@ -60,7 +60,7 @@ public class WeeklyReportService {
     }
 
     public List<WeeklyReportDto> getAllWeeklyReportsForPsychologist(String psychologistId) {
-        Optional<Psychologist> psychologistOptional = psychologistRepo.findById(psychologistId);
+        Optional<Psychologist> psychologistOptional = psychologistRepo.findByUserId(psychologistId);
         Psychologist psychologist = psychologistOptional.orElseThrow(() -> new UserNotFound("Psychologist not found"));
 
         List<WeeklyReport>w=weeklyReportRepo.findByPsychologist(psychologist);

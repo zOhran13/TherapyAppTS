@@ -62,7 +62,7 @@ public class PsychologistService {
         if (!isValidUUID(id)) {
             throw new IdNotUUID("Invalid userId format");
         }
-        Optional<Psychologist> psychologistOptional = psychologistRepository.findById(id.toString());
+        Optional<Psychologist> psychologistOptional = psychologistRepository.findByUserId(id.toString());
         if (psychologistOptional.isPresent()) {
             psychologistRepository.deleteById(String.valueOf(id));
         } else {

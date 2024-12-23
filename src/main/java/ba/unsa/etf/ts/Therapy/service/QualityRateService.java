@@ -35,7 +35,7 @@ public class QualityRateService {
     }
 
     public Double getQualityRateForPsychologist(String psychologistId) {
-        Optional<Psychologist> p = psychologistRepo.findById(psychologistId);
+        Optional<Psychologist> p = psychologistRepo.findByUserId(psychologistId);
         Psychologist psychologist = p.orElseThrow(() -> new UserNotFound("Psychologist not found"));
 
         return qualityRateRepo.findAverageQualityRateByPsychologist(psychologist);
@@ -65,7 +65,7 @@ public class QualityRateService {
 
         Optional<Patient> patientOptional = patientRepo.findById(qualityRateDto.getPatientId());
         Patient patient = patientOptional.orElseThrow(() -> new UserNotFound("Patient not found"));
-        Optional<Psychologist> p = psychologistRepo.findById(qualityRateDto.getPsychologistId());
+        Optional<Psychologist> p = psychologistRepo.findByUserId(qualityRateDto.getPsychologistId());
         Psychologist psychologist = p.orElseThrow(() -> new UserNotFound("Psychologist not found"));
         QualityRate qualityRate = new QualityRate(psychologist, patient, qualityRateDto.getRate());
         return qualityRateRepo.save(qualityRate);
