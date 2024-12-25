@@ -66,50 +66,30 @@ public class DailyReportService {
     }
 
     public DailyReportDto createDailyReport(@Valid DailyReportDto dailyReportDto) {
-        DailyReport d=dailyReportMapper.fromDto(dailyReportDto);
-        Optional<Patient> patientOptional = Optional.empty();
-        Optional<WeeklyReport> weeklyReportOptional = Optional.empty();
-        if (d.getPatient() != null) {
-            patientOptional = patientRepo.findById(d.getPatient().getUserId());
-        }
-        if (d.getWeeklyReport() != null) {
-            weeklyReportOptional = weeklyReportRepo.findById(d.getWeeklyReport().getWeeklyReportId());
-        }
+        // Provjera postojanja pacijenta
+        Optional<Patient> patientOptional = patientRepo.findById(dailyReportDto.getPatientId());
         if (patientOptional.isEmpty()) {
-//            LoggingRequest loggingRequest = LoggingRequest.newBuilder()
-//                    .setServiceName("DailyReportService")
-//                    .setControllerName("DailyReportController")
-//                    .setActionUrl("/appointmentmanagement/createDailyReport")
-//                    .setActionType("POST")
-//                    .setActionResponse("ERROR")
-//                    .build();
-//            loggingServiceBlockingStub.logRequest(loggingRequest);
-//            throw new UserNotFound("Patient not found.");
-//        } else if ( weeklyReportOptional.isEmpty()) {
-//            LoggingRequest loggingRequest = LoggingRequest.newBuilder()
-//                    .setServiceName("DailyReportService")
-//                    .setControllerName("DailyReportController")
-//                    .setActionUrl("/appointmentmanagement/createDailyReport")
-//                    .setActionType("POST")
-//                    .setActionResponse("ERROR")
-//                    .build();
-//            loggingServiceBlockingStub.logRequest(loggingRequest);
-            throw new WeeklyReportNotFound("Weekly report not found.");
+            throw new UserNotFound("Patient not found with ID: " + dailyReportDto.getPatientId());
         }
+
+        // Provjera postojanja sedmičnog izvještaja (ako postoji weeklyReportId)
+        WeeklyReport weeklyReport = null;
+        if (dailyReportDto.getWeeklyReportId() != null) {
+            weeklyReport = weeklyReportRepo.findById(dailyReportDto.getWeeklyReportId())
+                    .orElseThrow(() -> new WeeklyReportNotFound("Weekly report not found with ID: " + dailyReportDto.getWeeklyReportId()));
+        }
+
+        // Kreiranje dnevnog izvještaja
         Patient patient = patientOptional.get();
-        WeeklyReport weeklyReport = weeklyReportOptional.orElseGet(() -> null);
-        DailyReport dailyReport = new DailyReport(d.getContent(), patient, weeklyReport);
+        DailyReport dailyReport = new DailyReport(dailyReportDto.getContent(), patient, weeklyReport);
+
+        // Spremanje u bazu
         DailyReport savedDailyReport = dailyReportRepo.save(dailyReport);
-//        LoggingRequest loggingRequest = LoggingRequest.newBuilder()
-//                .setServiceName("DailyReportService")
-//                .setControllerName("DailyReportController")
-//                .setActionUrl("/appointmentmanagement/createDailyReport")
-//                .setActionType("POST")
-//                .setActionResponse("SUCCESS")
-//                .build();
-//        loggingServiceBlockingStub.logRequest(loggingRequest);
+
+        // Vraćanje DTO objekta
         return dailyReportMapper.toDto(savedDailyReport);
     }
+
 
     public DailyReportDto updateDailyReport(@Valid DailyReportDto dto) {
         Optional<DailyReport> dailyReportOptional = dailyReportRepo.findById(dto.getDailyReportId());

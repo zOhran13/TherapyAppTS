@@ -24,22 +24,24 @@ public class CreateMeditationLogHandler {
 //    ba.unsa.etf.pnwt.proto.LoggingServiceGrpc.LoggingServiceBlockingStub loggingServiceBlockingStub;
 
     public ResponseEntity<CreateMeditationLogResponse> handle(CreateMeditationLogRequest request) {
-        var patientExists = patientExistenceHandler.handle(request.getPatientId());
+        System.out.println("Handling meditation log creation for patientId: " + request.getPatientId());
+
+        // Proverite postojanje pacijenta
+        boolean patientExists = patientExistenceHandler.handle(request.getPatientId());
+        System.out.println("Does patient exist? " + patientExists);
+
         if (!patientExists) {
             return ResponseEntity.notFound().build();
         }
+
+        // Kreirajte novu meditaciju
         StressReliefAction action = CreateMeditationLogMapper.INSTANCE.requestToEntity(request);
         action.setStartedAt(OffsetDateTime.now().withOffsetSameInstant(ZoneOffset.UTC));
         Meditation savedMeditation = (Meditation) stressReliefActionRepository.save(action);
-//        LoggingRequest loggingRequest = LoggingRequest.newBuilder()
-//                .setServiceName("StressReliefService")
-//                .setControllerName("StressReliefActionController")
-//                .setActionUrl("/stressrelief/meditation")
-//                .setActionType("POST")
-//                .setActionResponse("SUCCESS")
-//                .build();
-//        loggingServiceBlockingStub.logRequest(loggingRequest);
+
         CreateMeditationLogResponse response = CreateMeditationLogMapper.INSTANCE.entityToResponse(savedMeditation);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
+
 }

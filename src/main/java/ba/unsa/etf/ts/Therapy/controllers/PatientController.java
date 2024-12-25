@@ -31,14 +31,18 @@ public class PatientController {
 
     @GetMapping("/by-user-id")
     public ResponseEntity<Patient> getPatientByUserIdPatient(@RequestParam String userId) {
+        System.out.println("Fetching patient by userId: " + userId);
         Patient patient = patientService.findByUserIdPatient(userId);
+
         if (patient == null) {
             System.out.println("Patient not found for userId: " + userId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        System.out.println("Patient found: " + patient.getId());
+
+        System.out.println("Found patient with ID: " + patient.getId());
         return ResponseEntity.ok(patient);
     }
+
 
 
     @PostMapping("/save")

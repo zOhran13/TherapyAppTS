@@ -89,11 +89,18 @@ private final SessionRepo sessionRepo;
     public Patient savePatient(Patient patient) {
         return patientRepo.save(patient);
     }
-
     public Patient findByUserIdPatient(String userId) {
         System.out.println("Searching for patient with userId: " + userId);
-        return patientRepo.findByUserIdPatient(userId);
+        Patient patient = patientRepo.findByUserIdPatient(userId);
+        if (patient != null) {
+            System.out.println("Found patient with ID: " + patient.getId());
+            System.out.println("Selected Psychologist ID: " + patient.getSelectedPsychologistId());
+        } else {
+            System.out.println("No patient found with userId: " + userId);
+        }
+        return patient;
     }
+
 
 
 

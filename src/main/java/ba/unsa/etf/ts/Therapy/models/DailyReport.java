@@ -28,8 +28,10 @@ public class DailyReport {
 
     @NotNull(message = "Patient must be specified")
     @ManyToOne
-    @JoinColumn(name = "patient_id", referencedColumnName = "patient_user_id")
+    @JoinColumn(name = "patient_id", referencedColumnName = "id") // Promijenjeno referencedColumnName sa "patient_user_id" na "id"
     private Patient patient;
+
+
 
     @ManyToOne
     @JoinColumn(name = "weekly_report_id", referencedColumnName = "weekly_report_id")
