@@ -90,6 +90,13 @@ private final SessionRepo sessionRepo;
         return patientRepo.save(patient);
     }
 
+    public Patient findByUserIdPatient(String userId) {
+        System.out.println("Searching for patient with userId: " + userId);
+        return patientRepo.findByUserIdPatient(userId);
+    }
+
+
+
     public List<PatientDto> getAllPatientsThatGotNoReport(String psychologistId) {
         List<Patient> patientsWithoutReport = new ArrayList<>();
         Optional<Psychologist> psychologistOptional = psychologistRepo.findByUserId(psychologistId);

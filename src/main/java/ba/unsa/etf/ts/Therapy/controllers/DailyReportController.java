@@ -28,10 +28,17 @@ public class DailyReportController {
     }
 
     @PostMapping
-    public ResponseEntity<DailyReportDto> createDailyReport(@Valid @RequestBody DailyReportDto dailyReportDto) {
-        DailyReportDto dailyReport = dailyReportService.createDailyReport(dailyReportDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(dailyReport);
+    public ResponseEntity<?> createDailyReport(@Valid @RequestBody DailyReportDto dailyReportDto) {
+        try {
+            DailyReportDto dailyReport = dailyReportService.createDailyReport(dailyReportDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(dailyReport);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error creating daily report: " + e.getMessage());
+        }
     }
+
 
     @PutMapping("/{dailyReportId}")
     public ResponseEntity<DailyReportDto> updateDailyReport(@PathVariable String dailyReportId, @Valid @RequestBody DailyReportDto dailyReportDTO) {

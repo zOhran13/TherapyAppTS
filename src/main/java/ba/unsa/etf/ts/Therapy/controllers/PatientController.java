@@ -2,6 +2,7 @@ package ba.unsa.etf.ts.Therapy.controllers;
 
 import ba.unsa.etf.ts.Therapy.dto.Mapper.PatientMapper;
 import ba.unsa.etf.ts.Therapy.dto.PatientDto;
+import ba.unsa.etf.ts.Therapy.models.Patient;
 import ba.unsa.etf.ts.Therapy.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,17 +28,28 @@ public class PatientController {
         this.patientMapper = patientMapper;
     }
 
+
+    @GetMapping("/by-user-id")
+    public ResponseEntity<Patient> getPatientByUserIdPatient(@RequestParam String userId) {
+        Patient patient = patientService.findByUserIdPatient(userId);
+        if (patient == null) {
+            System.out.println("Patient not found for userId: " + userId);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        System.out.println("Patient found: " + patient.getId());
+        return ResponseEntity.ok(patient);
+    }
+
+
     @PostMapping("/save")
     public ResponseEntity<PatientDto> savePatient(@RequestBody PatientDto patient) {
         PatientDto savedPatient = patientService.savePatient(patient);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedPatient);
     }
 
-    /*@GetMapping("/findUserPatient/{patientId}")
-    public ResponseEntity<PatientDto> getUserPatientById(@PathVariable String patientId) {
-        Optional<PatientDto> patient = patientService.findById(patientId);
-        return patient.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }*/
+
+
+
 
     @GetMapping("/find/{patientId}")
     public ResponseEntity<PatientDto> findById(@PathVariable String patientId) {
