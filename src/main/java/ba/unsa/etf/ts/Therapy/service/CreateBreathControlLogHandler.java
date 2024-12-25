@@ -30,10 +30,12 @@ public class CreateBreathControlLogHandler {
         if (!patientExists) {
             return ResponseEntity.notFound().build();
         }
-        StressReliefAction action = CreateBreathControlLogMapper.INSTANCE.requestToEntity(request);
+        BreathControl action = new BreathControl();
+        action.setTempo(request.getTempo());
+        action.setPatientId(request.getPatientId());
         action.setStartedAt(OffsetDateTime.now().withOffsetSameInstant(ZoneOffset.UTC));
         BreathControl savedBreathControl = (BreathControl) stressReliefActionRepository.save(action);
-        CreateBreathControlLogResponse response = CreateBreathControlLogMapper.INSTANCE.entityToResponse(savedBreathControl);
+        CreateBreathControlLogResponse response = new CreateBreathControlLogResponse(savedBreathControl);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

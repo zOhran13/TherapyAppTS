@@ -25,10 +25,13 @@ public class CreateWalkLogHandler {
         if (!patientExists) {
             return ResponseEntity.notFound().build();
         }
-        StressReliefAction action = CreateWalkLogMapper.INSTANCE.requestToEntity(request);
+        Walk action = new Walk();
+        action.setPatientId(request.getPatientId());
+        action.setKilometers(request.getKilometers());
         action.setStartedAt(OffsetDateTime.now().withOffsetSameInstant(ZoneOffset.UTC));
         Walk savedWalk = (Walk) stressReliefActionRepository.save(action);
-        CreateWalkLogResponse response = CreateWalkLogMapper.INSTANCE.entityToResponse(savedWalk);
+        CreateWalkLogResponse response = new CreateWalkLogResponse(savedWalk);
+
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

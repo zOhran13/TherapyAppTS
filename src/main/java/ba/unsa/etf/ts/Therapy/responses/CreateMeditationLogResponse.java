@@ -12,5 +12,11 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 public class CreateMeditationLogResponse extends Meditation {
-
+public CreateMeditationLogResponse(Meditation meditation){
+    super.setStartedAt(meditation.getStartedAt());
+    super.setMusic(meditation.isMusic());
+    super.setDurationTime(meditation.getDurationTime());
+    super.setPatientId(meditation.getPatientId());
+    super.setStressReliefActionId(meditation.getStressReliefActionId());
+}
 }

@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/v3/api-docs.yaml", "/swagger-resources/**", "/webjars/**").permitAll()
                         .requestMatchers("/api/users/registerPsychologist", "/api/users/registerPatient", "/api/users/login").permitAll()
-                        .requestMatchers("/api/daily-reports/**", "/api/stressrelief/**", "/api/meditation-tools/**", "/api/articles/all", "/api/users/all", "/api/sessions/getAllAvailableSessions/", "/api/patients/checkIfPatientHasChosenPsychologist/**", "/api/patients/by-user-id/**").hasAuthority("ROLE_PATIENT")
+                        .requestMatchers("/api/daily-reports/**", "/api/stressrelief/**", "/api/meditation-tools/**", "/api/articles/all", "/api/users/all", "/api/sessions/getAllAvailableSessions/", "/api/patients/checkIfPatientHasChosenPsychologist/**", "/api/patients/by-user-id/**","/api/stressrelief/durationtime").hasAuthority("ROLE_PATIENT")
 
                         .requestMatchers("/api/articles/**", "/api/patients/**", "/api/weekly-reports/**").hasAuthority("ROLE_PSYCHOLOGIST")
                         .requestMatchers("/api/users/**","/api/articles/all").hasAuthority("ROLE_ADMINISTRATOR")
@@ -49,7 +49,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
         configuration.setAllowedOrigins(List.of("http://localhost:4200"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(List.of("*"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

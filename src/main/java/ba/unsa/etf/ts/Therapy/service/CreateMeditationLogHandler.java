@@ -35,11 +35,14 @@ public class CreateMeditationLogHandler {
         }
 
         // Kreirajte novu meditaciju
-        StressReliefAction action = CreateMeditationLogMapper.INSTANCE.requestToEntity(request);
+        Meditation action = new Meditation();
+        action.setMusic(request.isMusic());
+        action.setPatientId(request.getPatientId());
         action.setStartedAt(OffsetDateTime.now().withOffsetSameInstant(ZoneOffset.UTC));
         Meditation savedMeditation = (Meditation) stressReliefActionRepository.save(action);
 
-        CreateMeditationLogResponse response = CreateMeditationLogMapper.INSTANCE.entityToResponse(savedMeditation);
+        CreateMeditationLogResponse response = new CreateMeditationLogResponse(savedMeditation);
+
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
