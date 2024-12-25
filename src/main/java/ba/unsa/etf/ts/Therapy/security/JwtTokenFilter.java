@@ -3,6 +3,7 @@ package ba.unsa.etf.ts.Therapy.security;
 import ba.unsa.etf.ts.Therapy.models.UserEntity;
 import ba.unsa.etf.ts.Therapy.repository.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -30,6 +31,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
+        System.out.println("Request URI: " + request.getRequestURI());
+        System.out.println("HTTP Method: " + request.getMethod());
 
         String path = request.getRequestURI();
         if (isSwaggerPath(path)) {
@@ -44,15 +47,21 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             try {
                 if (jwtTokenHelper.validateTokenAndItsClaims(token, List.of("Administrator", "Psychologist", "Patient"))) {
                     String email = jwtTokenHelper.getClaimsFromToken(token).get("email", String.class);
+                    String role = jwtTokenHelper.getClaimsFromToken(token).get("role", String.class);
+
+                    // Mapiranje uloga na Spring Security authorities format
+                    String mappedRole = "ROLE_" + role.toUpperCase();
 
                     UserEntity userDetails = userRepository.findByEmail(email)
                             .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
+                    var authorities = List.of(new SimpleGrantedAuthority(mappedRole));
+
                     logger.info("Korisnik pronađen: " + userDetails.getEmail());
-                    logger.info("Authorities: " + userDetails.getAuthorities());
+                    logger.info("Mapped Authorities: " + authorities);
 
                     var authentication = new UsernamePasswordAuthenticationToken(
-                            userDetails, null, userDetails.getAuthorities());
+                            userDetails, null, authorities);
 
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -74,3 +83,4 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 path.contains("/webjars");
     }
 }
+

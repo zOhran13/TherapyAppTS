@@ -78,6 +78,7 @@ public class ArticleController {
     @GetMapping("/all")
     public ResponseEntity<?> getAllArticles() {
         List<Article> articles = articleService.getAllArticles();
+        System.out.println("Fetching all articles...");
         if (articles.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("No data", "No articles found"));
         }

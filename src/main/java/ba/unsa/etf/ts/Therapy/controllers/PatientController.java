@@ -33,17 +33,19 @@ public class PatientController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedPatient);
     }
 
-    @GetMapping("/findUserPatient/{patientId}")
+    /*@GetMapping("/findUserPatient/{patientId}")
     public ResponseEntity<PatientDto> getUserPatientById(@PathVariable String patientId) {
         Optional<PatientDto> patient = patientService.findById(patientId);
         return patient.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
+    }*/
 
     @GetMapping("/find/{patientId}")
     public ResponseEntity<PatientDto> findById(@PathVariable String patientId) {
         Optional<PatientDto> patient = patientService.findById(patientId);
         return patient.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+
 
     @GetMapping("/all")
     public ResponseEntity<List<PatientDto>> findAllPatients() {
@@ -57,11 +59,12 @@ public class PatientController {
         return ResponseEntity.ok("Patient deleted successfully.");
     }
 
-    @GetMapping("/checkIfPatientHasChosenPsychologist/{patientId}")
-    public ResponseEntity<Boolean> checkIfPatientHasChosenPsychologist(@PathVariable String patientId) {
-        boolean hasChosenPsychologist = patientService.checkIfPatientHasChosenPsychologist(patientId);
+    @GetMapping("/checkIfPatientHasChosenPsychologist/{patientUserId}")
+    public ResponseEntity<Boolean> checkIfPatientHasChosenPsychologist(@PathVariable String patientUserId) {
+        boolean hasChosenPsychologist = patientService.checkIfPatientHasChosenPsychologist(patientUserId);
         return ResponseEntity.ok(hasChosenPsychologist);
     }
+
 
     @GetMapping("/getAllPatientsThatGotNoReport/{psychologistId}")
     public ResponseEntity<List<PatientDto>> getAllPatientsThatGotNoReport(@PathVariable String psychologistId) {

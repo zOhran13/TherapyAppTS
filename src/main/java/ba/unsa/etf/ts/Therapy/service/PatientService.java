@@ -9,6 +9,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class PatientService {
+    private static final Logger log = LoggerFactory.getLogger(PatientService.class);
     private final PatientRepo patientRepo;
 private final PatientMapper patientMapper;
 private final PsychologistRepo psychologistRepo;
@@ -36,6 +39,8 @@ private final SessionRepo sessionRepo;
         this.weeklyReportRepo = weeklyReportRepo;
         this.sessionRepo = sessionRepo;
     }
+
+
 
     public PatientDto savePatient(@Valid PatientDto patientDto) {
          try{
@@ -68,14 +73,23 @@ private final SessionRepo sessionRepo;
         }
     }
 
-    public boolean checkIfPatientHasChosenPsychologist(String patientId) {
+    public boolean checkIfPatientHasChosenPsychologist(String patientUserId) {
+        log.info("Checking psychologist for patient_user_id: {}", patientUserId);
 
-        Optional<Patient> patientOptional = patientRepo.findById(patientId);
-        if (patientOptional.isPresent()) {
-        return patientOptional.map(patient -> patient.getSelectedPsychologistId() != null).orElse(false); } else {
-            throw new UserNotFound("Patient not found");
+        Patient patient = patientRepo.findByUserId(patientUserId);
+        if (patient == null) {
+            log.error("No patient found with patient_user_id: {}", patientUserId);
+            throw new UserNotFound("Patient not found with patient_user_id: " + patientUserId);
         }
+
+        log.info("Patient found: {}", patient);
+        return patient.getSelectedPsychologistId() != null;
     }
+
+    public Patient savePatient(Patient patient) {
+        return patientRepo.save(patient);
+    }
+
     public List<PatientDto> getAllPatientsThatGotNoReport(String psychologistId) {
         List<Patient> patientsWithoutReport = new ArrayList<>();
         Optional<Psychologist> psychologistOptional = psychologistRepo.findByUserId(psychologistId);
