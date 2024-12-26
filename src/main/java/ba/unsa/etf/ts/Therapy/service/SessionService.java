@@ -145,7 +145,7 @@ public class SessionService {
             throw new InvalidFormat("Invalid time format");
         }
 
-        Optional<Psychologist> p = psychologistRepo.findById(psychologistId);
+        Optional<Psychologist> p = psychologistRepo.findByUserId(psychologistId);
         Psychologist psychologist = p.orElseThrow(() -> new UserNotFound("Psychologist not found"));
 
         sessionRepo.deleteByPsychologistAndDayAndTime(psychologist, day, time);
@@ -196,7 +196,7 @@ public class SessionService {
     }
 
     public List<SessionDto> getPsychologistSessions(String psychologistId) {
-        Optional<Psychologist> p = psychologistRepo.findById(psychologistId);
+        Optional<Psychologist> p = psychologistRepo.findByUserId(psychologistId);
         Psychologist psychologist = p.orElseThrow(() -> new UserNotFound("Psychologist not found"));
 
         List<Session> sessions = sessionRepo.findByPsychologist(psychologist);

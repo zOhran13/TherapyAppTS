@@ -84,7 +84,15 @@ public class ArticleController {
         }
         return ResponseEntity.ok(articles);
     }
-
+    @GetMapping("/allPsychologists")
+    public ResponseEntity<?> getAllPsychologistsArticles(String id) {
+        List<Article> articles = articleService.getAllPsychologistsArticles(id);
+        System.out.println("Fetching all articles...");
+        if (articles.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("No data", "No articles found"));
+        }
+        return ResponseEntity.ok(articles);
+    }
     @GetMapping("/byKeyword/{keyword}")
     public ResponseEntity<?> getArticlesByKeyword(@PathVariable String keyword) {
         List<Article> articles = articleService.findArticlesByKeyword(keyword);

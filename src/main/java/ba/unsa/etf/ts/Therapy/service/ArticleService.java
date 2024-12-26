@@ -78,7 +78,7 @@ public class ArticleService {
     public List<Article> getAllArticles() {
         return articleRepository.findAll();
     }
-
+    public List<Article> getAllPsychologistsArticles(String id){return articleRepository.findByAuthor(id);}
     public List<Article> findArticlesByAuthor(String authorName) {
         return articleRepository.findByAuthor(authorName);
     }
