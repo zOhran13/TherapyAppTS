@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: therapy-backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://avnadmin:AVNS_ojL9a26ZQdtjAR_CX4L@therapy-therapy1.h.aivencloud.com:14462/defaultdb?ssl-mode=REQUIRED
+      SPRING_DATASOURCE_USERNAME: avnadmin
+      SPRING_DATASOURCE_PASSWORD: AVNS_ojL9a26ZQdtjAR_CX4L
+      JWT_SECRET: yourSecureSecretKeyHereAtLeast256BitsLong
+    restart: always
+    networks:
+      - therapy-network
+
+networks:
+  therapy-network:
